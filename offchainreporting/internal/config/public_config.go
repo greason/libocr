@@ -126,6 +126,10 @@ func checkIdentityListsHaveTheSameLength(
 	return nil
 }
 
+func CheckPublicConfigParameters(cfg PublicConfig) error {
+	return checkPublicConfigParameters(cfg)
+}
+
 // Sanity check on parameters:
 // (1) violations of fundamental constraints like 3*f<n;
 // (2) configurations that would trivially exhaust all of a node's resources;

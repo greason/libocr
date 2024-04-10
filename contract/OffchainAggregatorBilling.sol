@@ -636,6 +636,9 @@ contract OffchainAggregatorBilling is Owned {
   )
     internal
   {
+    if(s_linkToken == LinkTokenInterface(address(0))) {
+      return;
+    }
     Oracle memory txOracle = s_oracles[msg.sender];
     Billing memory billing = s_billing;
     // Reward oracles for providing observations. Oracles are not rewarded

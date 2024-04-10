@@ -31,7 +31,7 @@ contract OffchainAggregator is Owned, OffchainAggregatorBilling, AggregatorV2V3I
     // Current bound assumed on number of faulty/dishonest oracles participating
     // in the protocol, this value is referred to as f in the design
     uint8 threshold;
-    // Chainlink Aggregators expose a roundId to consumers. The offchain reporting
+    // Apro Aggregators expose a roundId to consumers. The offchain reporting
     // protocol does not use this id anywhere. We increment it whenever a new
     // transmission is made to provide callers with contiguous ids for successive
     // reports.
@@ -109,7 +109,7 @@ contract OffchainAggregator is Owned, OffchainAggregatorBilling, AggregatorV2V3I
     virtual
     returns (string memory)
   {
-    return "OffchainAggregator 4.0.0";
+    return "OffchainAggregator 1.0.0";
   }
 
   /*

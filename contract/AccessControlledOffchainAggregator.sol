@@ -50,7 +50,7 @@ contract AccessControlledOffchainAggregator is OffchainAggregator, SimpleReadAcc
     virtual
     returns (string memory)
   {
-    return "AccessControlledOffchainAggregator 4.0.0";
+    return "AccessControlledOffchainAggregator 1.0.0";
   }
 
 

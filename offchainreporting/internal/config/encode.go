@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"reflect"
 	"strings"
 	"time"
@@ -69,6 +70,13 @@ var configSizeBound = 20 * 1000
 // Encode returns a binary serialization of o
 func (o setConfigEncodedComponents) encode() []byte {
 	rv, err := encoding.Pack(o.serializationRepresentation())
+
+	var vals []interface{}
+	if vals, err = encoding.Unpack(rv); err != nil {
+		fmt.Printf("\ncould not deserialize setConfig binary blob, vals: %v", vals)
+	}
+	fmt.Printf("\nvals: %v", vals)
+	fmt.Printf("\nrv: %v", hexutil.Encode(rv))
 	if err != nil {
 		panic(err)
 	}
@@ -76,6 +84,12 @@ func (o setConfigEncodedComponents) encode() []byte {
 		panic("config serialization too large")
 	}
 	return rv
+}
+
+func DecodeContractSetConfigEncodedComponents(
+	b []byte,
+) (o setConfigEncodedComponents, err error) {
+	return decodeContractSetConfigEncodedComponents(b)
 }
 
 func decodeContractSetConfigEncodedComponents(
@@ -86,10 +100,12 @@ func decodeContractSetConfigEncodedComponents(
 			"attempt to deserialize a too-long config (%d bytes)", len(b),
 		)
 	}
+	fmt.Printf("\nrv: %v\n", hexutil.Encode(b))
 	var vals []interface{}
 	if vals, err = encoding.Unpack(b); err != nil {
 		return o, errors.Wrapf(err, "could not deserialize setConfig binary blob")
 	}
+	fmt.Printf("\nvals: %v", vals)
 	setConfig := abi.ConvertType(vals[0], &setConfigSerializationTypes{}).(*setConfigSerializationTypes)
 	return setConfig.golangRepresentation(), nil
 }
