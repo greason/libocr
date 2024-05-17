@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func AproOffChainAggregatorConfig(numberNodes int) test.OffChainAggregatorConfig {
+func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggregatorConfig {
 	if numberNodes <= 4 {
 		fmt.Printf("insufficient number of nodes (%d) supplied for OCR, need at least 5", numberNodes)
 	}
@@ -28,15 +28,41 @@ func AproOffChainAggregatorConfig(numberNodes int) test.OffChainAggregatorConfig
 	// cfg.DeltaRound < cfg.DeltaProgress
 	// 0 < cfg.RMax && cfg.RMax < 255
 	// len(cfg.S) < 1000
-	// USDT & USDC，0.1%，86400s
+
+	var AlphaPPB = uint64(10000000)
+	var DeltaC = time.Hour * 24
+	var DeltaProgress = time.Second * 35
+	var DeltaRound = time.Second * 30
+
+	switch target {
+	case MerlinBtc:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case MerlinUsdt:
+		// 0.1% / 86400s
+		AlphaPPB = uint64(1000000)
+		DeltaC = time.Hour * 24
+
+		DeltaProgress = time.Second * 305
+		DeltaRound = time.Second * 300
+	case MerlinUsdc:
+		// 0.1% / 86400s
+		AlphaPPB = uint64(1000000)
+		DeltaC = time.Hour * 24
+
+		DeltaProgress = time.Second * 305
+		DeltaRound = time.Second * 300
+	}
+
 	return test.OffChainAggregatorConfig{
-		AlphaPPB:         1000000, // 10 ^9
-		DeltaC:           time.Hour * 24,
+		AlphaPPB:         AlphaPPB, // 10 ^9
+		DeltaC:           DeltaC,
 		DeltaGrace:       time.Second * 12,
-		DeltaProgress:    time.Second * 35,
+		DeltaProgress:    DeltaProgress,
 		DeltaStage:       time.Second * 60,
 		DeltaResend:      time.Second * 17,
-		DeltaRound:       time.Second * 30,
+		DeltaRound:       DeltaRound,
 		RMax:             6,
 		S:                s,
 		N:                numberNodes,
@@ -296,7 +322,7 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 
 func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 	nodeConfigs := GetNodeConfigs(target)
-	ocrConfig := AproOffChainAggregatorConfig(len(nodeConfigs))
+	ocrConfig := AproOffChainAggregatorConfig(len(nodeConfigs), target)
 	for _, nodeConfig := range nodeConfigs {
 		// Need to convert the key representations
 		var onChainSigningAddress [20]byte
