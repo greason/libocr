@@ -81,6 +81,22 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 10%/10天
 		AlphaPPB = uint64(100000000)
 		DeltaC = time.Hour * 240
+	case MerlinMOrdi:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
+	case MerlinMStone:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
+	case MerlinMUsdc:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
+	case MerlinMUsdt:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -110,6 +126,11 @@ const (
 	MerlinRats
 	MerlinSats
 	MerlinStone
+
+	MerlinMOrdi
+	MerlinMStone
+	MerlinMUsdc
+	MerlinMUsdt
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
