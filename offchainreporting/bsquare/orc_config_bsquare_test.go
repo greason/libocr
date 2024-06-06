@@ -56,9 +56,9 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		AlphaPPB = uint64(2000000)
 		DeltaC = time.Hour * 24
 	case BsquareBSTONE:
-		// 1% / 86400s
-		AlphaPPB = uint64(10000000)
-		DeltaC = time.Hour * 24
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
 	}
 
 	return test.OffChainAggregatorConfig{
