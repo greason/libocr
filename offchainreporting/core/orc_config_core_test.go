@@ -8,6 +8,7 @@ import (
 	ocrConfigHelper "github.com/smartcontractkit/libocr/offchainreporting/confighelper"
 	"github.com/smartcontractkit/libocr/offchainreporting/internal/test"
 	ocrTypes "github.com/smartcontractkit/libocr/offchainreporting/types"
+	"strings"
 	"testing"
 	"time"
 )
@@ -60,7 +61,7 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		RMax:             6,
 		S:                s,
 		N:                numberNodes,
-		F:                1,
+		F:                (numberNodes - 1) / 3,
 		OracleIdentities: []ocrConfigHelper.OracleIdentityExtra{},
 	}
 }
@@ -354,7 +355,7 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(CoreSolvBtc)
+	ocrConfig := GetOffChainAggregatorConfig(CoreCore)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
@@ -368,7 +369,17 @@ func TestEncodeOCRConfig(t *testing.T) {
 		ocrConfig.OracleIdentities,
 		ocrConfig.F,
 	)
-	fmt.Printf("signers: %v, transmitters: %v, threshold: %v, encodedConfigVersion: %v, encodedConfig: %v, err: %v",
-		signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err)
-	fmt.Printf("\nencodedConfig: %v", hexutil.Encode(encodedConfig))
+	fmt.Printf("\nerr: %v\n", err)
+	fmt.Printf("\nsigners: %v\n", PrintList(signers))
+	fmt.Printf("transmitters: %v\n", PrintList(transmitters))
+	fmt.Printf("threshold: %v\n", threshold)
+	fmt.Printf("encodedConfigVersion: %v\n", encodedConfigVersion)
+	fmt.Printf("encodedConfig: %v", hexutil.Encode(encodedConfig))
+}
+
+func PrintList(content []common.Address) string {
+	txt := strings.Replace(fmt.Sprintf("%v", content), " ", "\",\"", -1)
+	txt = strings.Replace(txt, "[", "[\"", -1)
+	txt = strings.Replace(txt, "]", "\"]", -1)
+	return txt
 }
