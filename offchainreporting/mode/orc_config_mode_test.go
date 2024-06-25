@@ -50,8 +50,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		DeltaC = time.Hour * 1
 	case ModeWeEth:
 		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+
+		// 1000%/1000天
+		AlphaPPB = uint64(10000000000)
+		DeltaC = time.Hour * 24 * 1000
 	case ModeUsdt:
 		// 0.1% / 86400s
 		AlphaPPB = uint64(1000000)
@@ -66,8 +68,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		DeltaC = time.Hour * 24
 	case ModeStone:
 		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+
+		// 30%/30天
+		AlphaPPB = uint64(300000000)
+		DeltaC = time.Hour * 24 * 30
 	case ModeBBUSD:
 		// 0.2% / 86400s
 		AlphaPPB = uint64(2000000)
@@ -857,7 +861,7 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(ModeBBUSD)
+	ocrConfig := GetOffChainAggregatorConfig(ModeStone)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
