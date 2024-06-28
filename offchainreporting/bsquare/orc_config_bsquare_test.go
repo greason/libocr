@@ -62,6 +62,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 30%/30天
 		AlphaPPB = uint64(300000000)
 		DeltaC = time.Hour * 24 * 30
+	case BsquareSTONEETH:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -87,6 +91,8 @@ const (
 	BsquareEth
 	BsquareFDUSD
 	BsquareBSTONE
+
+	BsquareSTONEETH
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -567,6 +573,85 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 		nodeConfigs[BsquareBSTONE] = nodeConfigsBsquareBSTONE
 	}
 
+	{
+		nodeConfigsBsquareSTONEETH := []test.NodeOCRConfig{
+			{
+				Id:              1,
+				TransmitAddress: "0xA8455696F2DD85a6dce6b5AD683BF3602d73181B",
+				SignAddress:     "0xe3E2ca363f95d73A09004D998edc847A2B54c3BE",
+				ConfigPubKey:    "11cd7ed82bad0390e050572d8802206de9c18818f7baf095ea14eaad8a012c56",
+				OffChainPubKey:  "d9830855578491061f4cc28f37bc42acd1b8fa33c325dc729923b0ca5afd88db",
+				PeerID:          "12D3KooWLioyKDAmRUbggzL6uGBfrnboNtFnYpGydcyzJURFU9mg",
+				OffChainKeyId:   "2ffdb79c9f333d900627bd2aa3fc852fc239a703602fb95b806791565bbeb38c",
+			}, {
+				Id:              2,
+				TransmitAddress: "0x3c892f62acfeDB80c1046F6215b31BF48A704636",
+				SignAddress:     "0x593256dd35A30fdfD28D911354694bBCD9ffFED7",
+				ConfigPubKey:    "17895dea0e314618b7ddea718a7bd800159fde702577ad17dfdb1d96f26af07e",
+				OffChainPubKey:  "56ebda6aed7b818b5351030b1c745e46eb3fbfcf7fdb30a363a0caa9eb34ce6a",
+				PeerID:          "12D3KooWHpWYpFFryEoVAngkwtZS626SFzdawSrFNn5jpETx8PSb",
+				OffChainKeyId:   "1dac70a0e9e974c252f868406fd29b505717897393a505da65364d4abbc56632",
+			}, {
+				Id:              3,
+				TransmitAddress: "0xD11D0A08445F4F2daf2412f2D665e1fAD20F4f84",
+				SignAddress:     "0xc5386D9E945b9C5d2126d54d4f48B3224040D0Ae",
+				ConfigPubKey:    "4db5c3b2651d5ecd1c3c9291dd860f7d09f94e2a59c8e718f95d11b162b4182f",
+				OffChainPubKey:  "5c402b260ecf345a01ed630973fdc68bbd30532a8b15688b583b7922372cefae",
+				PeerID:          "12D3KooWNxnMSWMRRoUEZMq5Ta1KxDh8BYSmbtERNb2VGbmGgwqL",
+				OffChainKeyId:   "9c1b2338c02ae0c25d5e367a001c1eb61a7a5b333f961bf2ad75ec1c13b1fc97",
+			}, {
+				Id:              4,
+				TransmitAddress: "0x18AE11b760B3e1EAad18946cb3D64e97a565e3Ec",
+				SignAddress:     "0x2169f620e48B4429451711483e4aD767251ed50d",
+				ConfigPubKey:    "7acfa9058250c8080eeed629ce117196f34fc7bf199341881ced2f95b4690b6b",
+				OffChainPubKey:  "72a54123f72fd2f8b7305f061a6cb2467651a01fe8d58b113ad4a7882f97b1e3",
+				PeerID:          "12D3KooWDVFrNKvoTFxzXQahDwxrZ9ArctBSsMpHNx8avnc58YiS",
+				OffChainKeyId:   "530a4fdf85bc5019fd4da09b661559b41339cb06b39ebc3a0452d4a023fd5237",
+			}, {
+				Id:              5,
+				TransmitAddress: "0x4EA989bDBC43701bAeab917c16E8d4d7f193b590",
+				SignAddress:     "0x287311AfcD0Bd7Da0CC6D52F3443176F7512D019",
+				ConfigPubKey:    "314a7b93c043f470276a2d0161925f799cd040fe5e19b7edd952a7fcc7f4541b",
+				OffChainPubKey:  "755e2ef89f3dcca2c5f4226a3d4eb2ab4e23a0cff3fe799fba27dd1fc95b32f3",
+				PeerID:          "12D3KooWRaSynVTYKdo7Nky3i77dN3D3W4rw7dBY7jG7E22rJzxt",
+				OffChainKeyId:   "4fc86e775ea64d78594685f23e07e0fbeed103c660b7d85142d80c04ef5ff23c",
+			}, {
+				Id:              6,
+				TransmitAddress: "0x43020E6C38C3a8ce5247AF292858Df5cF3e664c4",
+				SignAddress:     "0x3e6522007ef8c967ACfb7037DdC4f1731d6A57E9",
+				ConfigPubKey:    "771a1988208c48f5833c35bb91dadf36e07d20a4c4b60323d97ab1b48a264004",
+				OffChainPubKey:  "1db4e970ccfb8ac9f8554d1bb404fcd5276a39bbbb25060192f687fc5594ea1c",
+				PeerID:          "12D3KooWK5ScgUx1T2VoPkQrajH9U4Xm1ccmsXo3BFjHJ4YQymkC",
+				OffChainKeyId:   "b385603d39ba582cbe7b3f8b264d6ab4cbd4dedb358be69da93ec59d88e6ba48",
+			}, {
+				Id:              7,
+				TransmitAddress: "0x7BDe199140F7bdBA1e259A26ab15775a1cb5e599",
+				SignAddress:     "0xd41797bb92d89778a30418CC075D241A1f307677",
+				ConfigPubKey:    "1ac781cc84c2a7c7371c5d36b29f4f45759d6030257f1707d0150bde8f11d379",
+				OffChainPubKey:  "690849339e42f469732fe6762b9128c1f010a90507a95affb5317514c75a1309",
+				PeerID:          "12D3KooWEC4V2WRH1Um5rBMhmSo6V1YHvAut7ycSXf7yW38z2K1X",
+				OffChainKeyId:   "7ad3034e7a2858926c31eb8bab64b643780bf2bd462a7bb86a63e980094d6f40",
+			}, {
+				Id:              8,
+				TransmitAddress: "0xa52074d8C7614cf4CaE28724c0C18476802e3434",
+				SignAddress:     "0xD8EBBCa70E7D0131a7B4E6E531A212a4F5B90839",
+				ConfigPubKey:    "cc3384fe45fc9e0c1a90dc33adf4977a46a5704de678866d5051a24c8ea4e950",
+				OffChainPubKey:  "5ad9595799d23108c4e8c9fc5511c2bf7f2dcd7a395b51ef41df8ec99f479177",
+				PeerID:          "12D3KooWHWViS2gJ9L8zcmxzzYNiGzxKKZxoHZNUQiaRafUhmsZo",
+				OffChainKeyId:   "51f35df80f194816519b0342f8ed405f1845917ea246df13d5649ffc45e5868e",
+			}, {
+				Id:              9,
+				TransmitAddress: "0x97cd58ED3B696C21128F395fB96f37550D201207",
+				SignAddress:     "0xB6a0bDa4C71913634efA4605C128018419bfA76C",
+				ConfigPubKey:    "d26ceae71dd70c5e947da2677db6daca92a25f68ff97430a220f2e586d4c3410",
+				OffChainPubKey:  "5f56b9463485ba5cb331a950e116c7285ad31ceb0a8e8463956b57404bbf0d0b",
+				PeerID:          "12D3KooWSYbns1kHv4dYQzYtXLm4pF1ouBZ8mXDGJqepfnvYHpQp",
+				OffChainKeyId:   "1a9b61bae308aee55bc8527431b1fc08b5c7a34a1bddcc6b22fd5442037e78c6",
+			},
+		}
+		nodeConfigs[BsquareSTONEETH] = nodeConfigsBsquareSTONEETH
+	}
+
 	return nodeConfigs[target]
 }
 
@@ -607,7 +692,7 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(BsquareBSTONE)
+	ocrConfig := GetOffChainAggregatorConfig(BsquareSTONEETH)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
