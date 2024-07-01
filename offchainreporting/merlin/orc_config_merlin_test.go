@@ -67,21 +67,22 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		AlphaPPB = uint64(10000000)
 		DeltaC = time.Hour * 4
 	case MerlinOrdi:
-		// 10%/10天
-		AlphaPPB = uint64(100000000)
-		DeltaC = time.Hour * 240
+		// 5%/28800s
+		AlphaPPB = uint64(50000000)
+		DeltaC = time.Hour * 8
 	case MerlinRats:
-		// 10%/10天
-		AlphaPPB = uint64(100000000)
-		DeltaC = time.Hour * 240
+		// 5%/28800s
+		AlphaPPB = uint64(50000000)
+		DeltaC = time.Hour * 8
 	case MerlinSats:
-		// 10%/10天
-		AlphaPPB = uint64(100000000)
-		DeltaC = time.Hour * 240
+		// 5%/28800s
+		AlphaPPB = uint64(50000000)
+		DeltaC = time.Hour * 8
 	case MerlinStone:
-		// 10%/10天
-		AlphaPPB = uint64(100000000)
-		DeltaC = time.Hour * 240
+		// 2%/28800s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 8
+
 	case MerlinMOrdi:
 		// 10%/10天
 		AlphaPPB = uint64(100000000)
@@ -967,7 +968,7 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(MerlinMerl)
+	ocrConfig := GetOffChainAggregatorConfig(MerlinStone)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
