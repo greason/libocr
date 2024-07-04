@@ -53,8 +53,8 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		AlphaPPB = uint64(1000000)
 		DeltaC = time.Hour * 24
 	case BSCBNB:
-		// 1% / 3600s
-		AlphaPPB = uint64(10000000)
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
 	}
 
@@ -245,7 +245,7 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 	}
 
 	{
-		nodeConfigsBSCUsdt := []test.NodeOCRConfig{
+		nodeConfigsBSCUsdc := []test.NodeOCRConfig{
 			{
 				Id:              1,
 				TransmitAddress: "0xEf3397302D05b2EC482FA52F53b1366D617EFBDd",
@@ -320,11 +320,11 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 				OffChainKeyId:   "9e31c7f62587fdd3166842eb9097e9b2da84f56ac68925ab15370ae3b35cff89",
 			},
 		}
-		nodeConfigs[BSCUsdt] = nodeConfigsBSCUsdt
+		nodeConfigs[BSCUsdc] = nodeConfigsBSCUsdc
 	}
 
 	{
-		nodeConfigsBSCUsdc := []test.NodeOCRConfig{
+		nodeConfigsBSCUsdt := []test.NodeOCRConfig{
 			{
 				Id:              1,
 				TransmitAddress: "0xEf3397302D05b2EC482FA52F53b1366D617EFBDd",
@@ -399,7 +399,7 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 				OffChainKeyId:   "2c3d29263ccc33c7f98bf1d47ea12b3b487ea6ef284f7c1c7f9ca758f715ed7b",
 			},
 		}
-		nodeConfigs[BSCUsdc] = nodeConfigsBSCUsdc
+		nodeConfigs[BSCUsdt] = nodeConfigsBSCUsdt
 	}
 
 	{
