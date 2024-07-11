@@ -99,6 +99,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 10%/10天
 		AlphaPPB = uint64(100000000)
 		DeltaC = time.Hour * 240
+	case MerlinETH:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
 	case MerlinSTONEETH:
 		// 10%/10天
 		AlphaPPB = uint64(100000000)
