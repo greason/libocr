@@ -56,7 +56,7 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
-	case BSCstBTC:
+	case BSCstBTC_BTC:
 		// 10% / 10天
 		AlphaPPB = uint64(100000000)
 		DeltaC = time.Hour * 240
@@ -84,7 +84,7 @@ const (
 	BSCBtc
 	BSCEth
 	BSCBNB
-	BSCstBTC
+	BSCstBTC_BTC
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -487,7 +487,7 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 	}
 
 	{
-		nodeConfigsBSCstBTC := []test.NodeOCRConfig{
+		nodeConfigsBSCstBTC_BTC := []test.NodeOCRConfig{
 			{
 				Id:              1,
 				TransmitAddress: "0xEf3397302D05b2EC482FA52F53b1366D617EFBDd",
@@ -562,7 +562,7 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 				OffChainKeyId:   "a4bcbc14d1896cee462185c52772deaedcb588a083a74f962d91c9bf820f0370",
 			},
 		}
-		nodeConfigs[BSCstBTC] = nodeConfigsBSCstBTC
+		nodeConfigs[BSCstBTC_BTC] = nodeConfigsBSCstBTC_BTC
 	}
 
 	return nodeConfigs[target]
@@ -605,7 +605,7 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(BSCstBTC)
+	ocrConfig := GetOffChainAggregatorConfig(BSCstBTC_BTC)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
