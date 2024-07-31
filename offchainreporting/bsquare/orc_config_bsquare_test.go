@@ -78,17 +78,17 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
 	case BsquareMBtcBtcER:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+		// 0.2%/10天
+		AlphaPPB = uint64(2000000)
+		DeltaC = time.Hour * 240
 	case BsquareSolvBtcMBtcER:
-		// 0.5%/10天
-		AlphaPPB = uint64(5000000)
+		// 0.2%/10天
+		AlphaPPB = uint64(2000000)
 		DeltaC = time.Hour * 240
 	case BsquareuBtcBtcER:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+		// 0.2%/10天
+		AlphaPPB = uint64(2000000)
+		DeltaC = time.Hour * 240
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -1197,7 +1197,7 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(BsquareBSTONE)
+	ocrConfig := GetOffChainAggregatorConfig(BsquareuBtcBtcER)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
