@@ -62,6 +62,10 @@ func (o offchainConfig) serialize() []byte {
 	return rv
 }
 
+func DeserializeOffchainConfig(b []byte) (offchainConfig, error) {
+	return deserializeOffchainConfig(b)
+}
+
 func deserializeOffchainConfig(
 	b []byte,
 ) (offchainConfig, error) {
