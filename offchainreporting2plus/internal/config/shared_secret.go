@@ -3,6 +3,7 @@ package config
 import (
 	"crypto/aes"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -94,7 +95,8 @@ func (e SharedSecretEncryptions) Decrypt(oid commontypes.OracleID, k types.Offch
 	sharedSecret := aesDecryptBlock(key, e.Encryptions[int(oid)][:])
 
 	if common.BytesToHash(crypto.Keccak256(sharedSecret[:])) != e.SharedSecretHash {
-		return nil, errors.Errorf("decrypted sharedSecret has wrong hash")
+		return nil, errors.Errorf("decrypted sharedSecret has wrong hash, sharedSecret: %v, e.SharedSecretHash: %v",
+			hexutil.Encode(sharedSecret[:]), e.SharedSecretHash.String())
 	}
 
 	return &sharedSecret, nil
