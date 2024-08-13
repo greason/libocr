@@ -3,12 +3,15 @@ package test
 import (
 	"encoding/binary"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ocrConfigHelper "github.com/smartcontractkit/libocr/offchainreporting/confighelper"
 	"github.com/smartcontractkit/libocr/offchainreporting/internal/config"
 	ocrTypes "github.com/smartcontractkit/libocr/offchainreporting/types"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -62,6 +65,21 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) OffChainAggregato
 		DeltaC = time.Hour * 4
 		break
 	case BitlayerTestBitcoinPuppets:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+		break
+	case BSCTest_bitcoin_puppets_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+		break
+	case BSCTest_nodeMonkey_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+		break
+	case BSCTest_runeStone_btc:
 		// 2% / 14400s
 		AlphaPPB = uint64(20000000)
 		DeltaC = time.Hour * 4
@@ -133,6 +151,10 @@ const (
 
 	CoreTestBtc
 	CoreTestUsdt
+
+	BSCTest_bitcoin_puppets_btc
+	BSCTest_nodeMonkey_btc
+	BSCTest_runeStone_btc
 )
 
 func GetNodeConfigs(target int) []NodeOCRConfig {
@@ -1448,8 +1470,21 @@ func GetNodeConfigs(target int) []NodeOCRConfig {
 	return nodeConfigs[target]
 }
 
-func GetOffChainAggregatorConfig(target int) OffChainAggregatorConfig {
+func GetOffChainAggregatorConfig(target int, publicKeyPath string) OffChainAggregatorConfig {
 	nodeConfigs := GetNodeConfigs(target)
+
+	if len(publicKeyPath) > 0 {
+		content, _ := os.ReadFile(publicKeyPath)
+		var ocrConfigs []NodeOCRConfig
+		err := json.Unmarshal(content, &ocrConfigs)
+		if err != nil {
+			return OffChainAggregatorConfig{}
+		}
+		ocrConfigs = ocrConfigs[1:]
+		nodeConfigs = ocrConfigs
+		fmt.Printf("nodeConfigs: %v", nodeConfigs)
+	}
+
 	ocrConfig := AproOffChainAggregatorConfig(len(nodeConfigs), target)
 	for _, nodeConfig := range nodeConfigs {
 		// Need to convert the key representations
@@ -1485,7 +1520,15 @@ func GetOffChainAggregatorConfig(target int) OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(BitlayerTestBitcoinPuppets)
+	readPublicKeyFromFIle := true
+	publicKeyPath := ""
+	if readPublicKeyFromFIle {
+		publicKeyFileName := "publicKeys_runeStone_btc.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/bscTest/publicKeys/",
+			publicKeyFileName)
+	}
+
+	ocrConfig := GetOffChainAggregatorConfig(BSCTest_runeStone_btc, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
