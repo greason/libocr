@@ -65,6 +65,19 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
 
+	case CoreMBtcBtcER:
+		// 0.2%/10天
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case CoreMBtcUsd:
+		// 0.5%/3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case CoreSolvBtcBtcbER:
+		// 0.5%/3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+
 	case CoreSolvBtc_temp:
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
@@ -98,6 +111,10 @@ const (
 	CoreCore
 	CoreSolvBtcMbtc
 	CoreSolvBtc
+
+	CoreMBtcBtcER
+	CoreMBtcUsd
+	CoreSolvBtcBtcbER
 
 	// unused
 	CoreSolvBtc_temp
@@ -637,12 +654,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_solvbtc_usd.json"
+		publicKeyFileName := "publicKeys_mbtc_btc.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/coreMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(CoreSolvBtc, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(CoreMBtcBtcER, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
