@@ -67,8 +67,8 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 
 	case CoreMBtcBtcER:
 		// 0.2%/10天
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+		AlphaPPB = uint64(2000000)
+		DeltaC = time.Hour * 24 * 10
 	case CoreMBtcUsd:
 		// 0.5%/3600s
 		AlphaPPB = uint64(5000000)
