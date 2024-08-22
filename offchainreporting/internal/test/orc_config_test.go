@@ -84,6 +84,16 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) OffChainAggregato
 		AlphaPPB = uint64(20000000)
 		DeltaC = time.Hour * 4
 		break
+	case BSCTest_ordinalsMaxiBiz_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+		break
+	case BSCTest_quantumCats_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+		break
 	case BSCTest_btc:
 		// 1% / 14400s
 		AlphaPPB = uint64(20000000)
@@ -173,6 +183,8 @@ const (
 	BSCTest_btc
 	BSCTest_ordi
 	BSCTest_sats
+	BSCTest_ordinalsMaxiBiz_btc
+	BSCTest_quantumCats_btc
 )
 
 func GetNodeConfigs(target int) []NodeOCRConfig {
@@ -1541,12 +1553,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_sats_usd.json"
+		publicKeyFileName := "publicKeys_quantum_cats_btc.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/bscTest/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(BSCTest_sats, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(BSCTest_quantumCats_btc, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
