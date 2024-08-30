@@ -2,12 +2,15 @@ package bsc
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ocrConfigHelper "github.com/smartcontractkit/libocr/offchainreporting/confighelper"
 	"github.com/smartcontractkit/libocr/offchainreporting/internal/test"
 	ocrTypes "github.com/smartcontractkit/libocr/offchainreporting/types"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -60,6 +63,27 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 10% / 10天
 		AlphaPPB = uint64(100000000)
 		DeltaC = time.Hour * 240
+
+	case BSCFBTC:
+		// 0.5%/3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case BSC_TONBTC:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
+	case BSC_TONDOGS:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
+	case BSC_TONNOT:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
+	case BSC_TONTON:
+		// 10%/10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -85,6 +109,12 @@ const (
 	BSCEth
 	BSCBNB
 	BSCstBTC_BTC
+
+	BSCFBTC
+	BSC_TONBTC
+	BSC_TONDOGS
+	BSC_TONNOT
+	BSC_TONTON
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -568,8 +598,20 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 	return nodeConfigs[target]
 }
 
-func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
+func GetOffChainAggregatorConfig(target int, publicKeyPath string) test.OffChainAggregatorConfig {
 	nodeConfigs := GetNodeConfigs(target)
+
+	if len(publicKeyPath) > 0 {
+		content, _ := os.ReadFile(publicKeyPath)
+		var ocrConfigs []test.NodeOCRConfig
+		err := json.Unmarshal(content, &ocrConfigs)
+		if err != nil {
+			return test.OffChainAggregatorConfig{}
+		}
+		ocrConfigs = ocrConfigs[2:]
+		nodeConfigs = ocrConfigs
+		fmt.Printf("nodeConfigs: %v", nodeConfigs)
+	}
 	ocrConfig := AproOffChainAggregatorConfig(len(nodeConfigs), target)
 	for _, nodeConfig := range nodeConfigs {
 		// Need to convert the key representations
@@ -605,7 +647,15 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(BSCstBTC_BTC)
+	readPublicKeyFromFIle := true
+	publicKeyPath := ""
+	if readPublicKeyFromFIle {
+		publicKeyFileName := "publicKeys_tonton_usd.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/bscMain/publicKeys/",
+			publicKeyFileName)
+	}
+
+	ocrConfig := GetOffChainAggregatorConfig(BSC_TONTON, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
