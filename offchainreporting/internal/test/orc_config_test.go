@@ -176,6 +176,7 @@ const (
 
 	CoreTestBtc
 	CoreTestUsdt
+	CoreTestCore
 
 	BSCTest_bitcoin_puppets_btc
 	BSCTest_nodeMonkey_btc
@@ -1553,12 +1554,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_quantum_cats_btc.json"
-		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/bscTest/publicKeys/",
+		publicKeyFileName := "publicKeys_core_usd.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/coreTest/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(BSCTest_quantumCats_btc, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(CoreTestCore, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
