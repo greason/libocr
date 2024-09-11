@@ -2,12 +2,15 @@ package mode
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ocrConfigHelper "github.com/smartcontractkit/libocr/offchainreporting/confighelper"
 	"github.com/smartcontractkit/libocr/offchainreporting/internal/test"
 	ocrTypes "github.com/smartcontractkit/libocr/offchainreporting/types"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -76,6 +79,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.2% / 86400s
 		AlphaPPB = uint64(2000000)
 		DeltaC = time.Hour * 24
+	case ModeaBtcUSD:
+		// 0.5%/3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -104,6 +111,8 @@ const (
 	ModeMode
 	ModeStone
 	ModeBBUSD
+
+	ModeaBtcUSD
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -824,8 +833,20 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 	return nodeConfigs[target]
 }
 
-func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
+func GetOffChainAggregatorConfig(target int, publicKeyPath string) test.OffChainAggregatorConfig {
 	nodeConfigs := GetNodeConfigs(target)
+
+	if len(publicKeyPath) > 0 {
+		content, _ := os.ReadFile(publicKeyPath)
+		var ocrConfigs []test.NodeOCRConfig
+		err := json.Unmarshal(content, &ocrConfigs)
+		if err != nil {
+			return test.OffChainAggregatorConfig{}
+		}
+		ocrConfigs = ocrConfigs[2:]
+		nodeConfigs = ocrConfigs
+		fmt.Printf("nodeConfigs: %v", nodeConfigs)
+	}
 	ocrConfig := AproOffChainAggregatorConfig(len(nodeConfigs), target)
 	for _, nodeConfig := range nodeConfigs {
 		// Need to convert the key representations
@@ -861,7 +882,15 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(ModeStone)
+	readPublicKeyFromFIle := true
+	publicKeyPath := ""
+	if readPublicKeyFromFIle {
+		publicKeyFileName := "publicKeys_abtc_usd.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/modeMain/publicKeys/",
+			publicKeyFileName)
+	}
+
+	ocrConfig := GetOffChainAggregatorConfig(ModeaBtcUSD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
