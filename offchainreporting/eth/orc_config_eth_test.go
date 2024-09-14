@@ -41,8 +41,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 	switch target {
 	case ETH_FBTC_USD:
 		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+
+		// 10% / 10天
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 240
 	}
 
 	return test.OffChainAggregatorConfig{
