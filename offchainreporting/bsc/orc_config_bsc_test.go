@@ -84,6 +84,31 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 10%/10天
 		AlphaPPB = uint64(100000000)
 		DeltaC = time.Hour * 240
+
+	case BSC_ordi:
+		// 1%/86400s
+		AlphaPPB = uint64(10000000)
+		DeltaC = time.Hour * 24
+	case BSC_sats:
+		// 1%/86400s
+		AlphaPPB = uint64(10000000)
+		DeltaC = time.Hour * 24
+	case BSC_bitcoin_puppets_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+	case BSC_nodeMonkey_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+	case BSC_ordinalsMaxiBiz_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
+	case BSC_quantumCats_btc:
+		// 2% / 14400s
+		AlphaPPB = uint64(20000000)
+		DeltaC = time.Hour * 4
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -115,6 +140,13 @@ const (
 	BSC_TONDOGS
 	BSC_TONNOT
 	BSC_TONTON
+
+	BSC_ordi
+	BSC_sats
+	BSC_bitcoin_puppets_btc
+	BSC_nodeMonkey_btc
+	BSC_ordinalsMaxiBiz_btc
+	BSC_quantumCats_btc
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -650,12 +682,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_tonton_usd.json"
+		publicKeyFileName := "publicKeys_sats_usd.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/bscMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(BSC_TONTON, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(BSC_sats, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
