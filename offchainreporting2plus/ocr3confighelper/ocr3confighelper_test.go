@@ -279,7 +279,7 @@ func TestEncodeOCR2MercuryV3Config(t *testing.T) {
 		configPkBytesFixed := [curve25519.PointSize]byte{}
 		copy(configPkBytesFixed[:], configPkBytes)
 
-		csaPublicKey := strings.TrimPrefix(nodeConfig.CSAPublicKey, "")
+		csaPublicKey := strings.TrimPrefix(nodeConfig.CSAPublicKey, "csa_")
 		oracleIdentity := confighelper.OracleIdentity{
 			OffchainPublicKey: offchainPkBytesFixed,
 			OnchainPublicKey:  onchainPublicKey,
