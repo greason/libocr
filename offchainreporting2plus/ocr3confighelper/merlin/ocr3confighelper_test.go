@@ -31,7 +31,7 @@ var (
 	}
 	rawReportingPluginConfig = ocr3confighelper.OffchainConfig{
 		ExpirationWindow: 86400, //
-		BaseUSDFee:       decimal.NewFromFloat32(0.3),
+		BaseUSDFee:       decimal.NewFromFloat32(0.35),
 		//BaseUSDFee:       decimal.NewFromFloat32(0.000000000000000001),
 	}
 )
