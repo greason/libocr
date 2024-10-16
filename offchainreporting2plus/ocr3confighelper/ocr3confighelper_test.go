@@ -14,6 +14,7 @@ import (
 	"github.com/smartcontractkit/libocr/offchainreporting2plus/internal/config/ocr3config"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/curve25519"
+	"golang.org/x/crypto/sha3"
 	"math/big"
 	"strings"
 	"testing"
@@ -29,7 +30,7 @@ var (
 	}
 	rawReportingPluginConfig = OffchainConfig{
 		ExpirationWindow: 86400, //
-		BaseUSDFee:       decimal.NewFromFloat32(0.64),
+		BaseUSDFee:       decimal.NewFromFloat32(0.35),
 		//BaseUSDFee:       decimal.NewFromFloat32(0.000000000000000001),
 	}
 )
@@ -59,14 +60,17 @@ func AproOCR2MercuryConfig(numberNodes int, target int) PublicConfig {
 		//DeltaProgress = time.Second * 17
 		//DeltaRound = time.Second * 15
 
-		DeltaProgress = time.Second * 35
-		DeltaRound = time.Second * 30
+		//DeltaProgress = time.Second * 35
+		//DeltaRound = time.Second * 30
+
+		DeltaProgress = time.Second * 17
+		DeltaRound = time.Second * 15
 	case MercuryEth:
-		DeltaProgress = time.Second * 35
-		DeltaRound = time.Second * 30
-	case MercuryLink:
-		DeltaProgress = time.Second * 35
-		DeltaRound = time.Second * 30
+		DeltaProgress = time.Second * 17
+		DeltaRound = time.Second * 15
+	case MercuryValueless:
+		DeltaProgress = time.Second * 17
+		DeltaRound = time.Second * 15
 	}
 
 	// 参考：offchainreporting2plus/internal/config/ocr3config
@@ -97,7 +101,7 @@ func AproOCR2MercuryConfig(numberNodes int, target int) PublicConfig {
 const (
 	MercuryBtc = iota
 	MercuryEth
-	MercuryLink
+	MercuryValueless
 )
 
 func GetNodeConfigs(target int) []NodeOCR2MercuryConfig {
@@ -107,46 +111,46 @@ func GetNodeConfigs(target int) []NodeOCR2MercuryConfig {
 		nodeConfigsMercuryBtc := []NodeOCR2MercuryConfig{
 			{
 				Id:                1,
-				ConfigPublicKey:   "a657008c2652576fbeee83449e3e464a7c3512262f34ab13588eadbf9c1aab08",
-				OnchainPublicKey:  "a33d88f4283b7916de3c36ca64632b68cb74577b",
-				OffchainPublicKey: "5b682bda0deae08968686eb4ce227d8162e7a09192d5f58f9a84ee12317a6e78",
-				PeerID:            "12D3KooWMM4ufpHRmAuXBhwWeY6V12UMKjonkg1YR82PPLYMsYKS",
-				OffChainKeyId:     "012d9a770762ade43e3ad11b448904ba747e6ba95fae0ecfe6527163338c35c3",
-				CSAPublicKey:      "47c7c72b247f52897d3eae93c451035e600dd2c5b51636929961d53a3feab825",
+				ConfigPublicKey:   "ocr2cfg_evm_83b7e8a0b47d51464ca457cbb286c4f8a65dd80fa4bf9a0b629a2c2003344838",
+				OnchainPublicKey:  "ocr2on_evm_f5561111581cff697b71d4e97c59f9848c3db18a",
+				OffchainPublicKey: "ocr2off_evm_9ae13859821d7a939a122f1858fb28639d0a92f09b5e1cd89e94d26a3a97078d",
+				PeerID:            "12D3KooWJCEsfgchffSMFo3WWpJaeVKpb1cx5iUhax7GPGXmvpto",
+				OffChainKeyId:     "049d6485d5957b4c67d320a3f050a5dbeab26260280b7fc98f78ca823596c9b6",
+				CSAPublicKey:      "78804c63374be97b450edbb37213c230a187fec0157177f5b7dce98038cab7c7",
 			}, {
 				Id:                2,
-				ConfigPublicKey:   "e194cc8de045254f486af65dcbdd1843433036db321a7af114cfbd3f49bde82e",
-				OnchainPublicKey:  "7f754db02aab92f888db92fe6bab4d4dbe1982ff",
-				OffchainPublicKey: "449c08688d0f98e1317c9016c7c845554f24f8cf831ad6ce703940e6f2fc28dc",
-				PeerID:            "12D3KooWPjc5CeHTBc4LL9Z3ekyfEbVHhP85MqwffJfmfP68y3h7",
-				OffChainKeyId:     "90a4ceef1170a77753f34adfacf3ce87df95b6a17994822af7831f9e41da9f42",
-				CSAPublicKey:      "66ed61baa2c6e8ff8d6db48ba9d6cf7f2f212bf922dff57eda2a8558d65e69c0",
+				ConfigPublicKey:   "ocr2cfg_evm_f751156c56472a8f8ffdc2bdc3d42932cb9defbca3e0d850cf74c961b0b8bb3b",
+				OnchainPublicKey:  "ocr2on_evm_4e68cb4feedadbd4d2322cfdfca610cf99631f28",
+				OffchainPublicKey: "ocr2off_evm_a5e8bde6f541ee583ce8c6bc960f84488a9473f118e0193e7e808741979dd11e",
+				PeerID:            "12D3KooWK2N5cverNrfdu7DswaNGFu4iCFG1dgwgotY7iVkQNE1F",
+				OffChainKeyId:     "0ce7af053f9bd94dfbece287b343a3aee22b735071bc4eb1d1874df6ddfda325",
+				CSAPublicKey:      "7d1fb12ba8ea979489a6aa5a48198002ecd36035da18332acfa58c82491698c3",
 			}, {
 				Id:                3,
-				ConfigPublicKey:   "f1f72bc1a14400d286e6cc22b6c9a0eeeb94fdb6e1da84ce744ac64fc3e8852f",
-				OnchainPublicKey:  "96ac87edf0570ccf1b806dc7b6bf7afe74ceaad4",
-				OffchainPublicKey: "a75e55406e33f5d8b875518a5eac470f3578165e90cb14421902f2cfe3204f20",
-				PeerID:            "12D3KooWAp9d7Hn4uw4nEwpmvUVWCoRH3qbuLhgtayDLNm7FK1KH",
-				OffChainKeyId:     "84147e6accb355dec97ad0f19b6debc1bdd240545c7b3fded314171c7fa40f7f",
-				CSAPublicKey:      "424661e19e2aef1cfe643202d54f0e298ec1315459bc8bf46f6b9177e4b0d223",
+				ConfigPublicKey:   "ocr2cfg_evm_3f4ed8547032974dca1310cde2415ff22e872481ba862961ff76210a40eb844a",
+				OnchainPublicKey:  "ocr2on_evm_021c60e8d51de06396909ddfe8bb492e7e2db0f9",
+				OffchainPublicKey: "ocr2off_evm_0ab32a81afc1c25b4e02bffc4db2439c81063e3beebf213bf80f05ac8c052408",
+				PeerID:            "12D3KooWDjoTCv3HBUfVGTBxo9z4zjsVYdDSPaUWZKZKFKKJ6akq",
+				OffChainKeyId:     "f88f8fcd68ac411a81b6bfea6e3a8d9b247fdf9304c45d4c75db9ed33ac18a5c",
+				CSAPublicKey:      "699dd4f2b22fb5698e3327b5b6b4e46fe9d104b88f80b06f2ff259a5c5d821c2",
 			}, {
 				Id:                4,
-				ConfigPublicKey:   "c76605c57b95ba0b42688b4666296ba69caabe34a599c7442f63f6624c4fc338",
-				OnchainPublicKey:  "5a650ec7b903b33fbe1c650f107f26b9b8a23ddc",
-				OffchainPublicKey: "b17cd8bb04c528836a1cf0b36a813d40073db398179ce08de17b55ee0d5462e9",
-				PeerID:            "12D3KooWMDF2YxveKKa7rYN4fM7Uz46basme4fAHR28uwEoeKu45",
-				OffChainKeyId:     "3a811c7747c096221b024ff26b1e11232d999e91e7bc1369b43aea4a2b23af9c",
-				CSAPublicKey:      "f73ad354bde5da64affdff723ff4f0ac3d9a1d667d39b2dac7f1c75fedeab0e5",
-			}, //local
-			/*{
+				ConfigPublicKey:   "ocr2cfg_evm_2e21ca6676a00c9972ad82870a9eabf8bb5df8e5644a14895a5d5ec6499a944a",
+				OnchainPublicKey:  "ocr2on_evm_0c335747dcbd99c45a869c1b18f5bb5da4e9f748",
+				OffchainPublicKey: "ocr2off_evm_a614f4d7170cfe989ff5d72ca8148af2da2e54fe933617ac715c381166f7da9a",
+				PeerID:            "12D3KooWKaVh29LwUq9NfvRQw8nFuzUJrPfYzpzQFWPSCwnpkhij",
+				OffChainKeyId:     "96aa0f3d1d1d43ed5a00623ceaf439d0bbc83c6f9a580bfeaaa1e9af9a6d7867",
+				CSAPublicKey:      "0d52032dc5e6a9eee050386d3e7fd6c413a722a6490cb3fb01f17bc18b338117",
+			},
+			{
 				Id:                5,
-				ConfigPublicKey:   "93704424f889ebbe1927b27525f4da684864a44d2eaff68b4fc445bc8fef141f",
-				OnchainPublicKey:  "438bf1231c808ad81a03dbc4723970ec91600f5f",
-				OffchainPublicKey: "e8de8cb3b0e5aee85ca8f1cf44d5801dbccfec33fbf8e71f4c635611dfcdcfb2",
-				PeerID:            "12D3KooWREWK4CwDCDWTWWa77c7iJLzendzv5zBEX8uS61V1Xi59",
-				OffChainKeyId:     "3d1117c6c53990302ad6ebc775674cd20078b94a2920b2c5b6c46f62760432c0",
-				CSAPublicKey:      "e93672b0df5f282fe6ce0385074461419f7dfae7158e3d074a21b909330a6495",
-			},*/
+				ConfigPublicKey:   "ocr2cfg_evm_0aed91881e86e5f0e56d52a9fb29c56d92e6eeccddec55fc85a62f177e9f6a71",
+				OnchainPublicKey:  "ocr2on_evm_9ca4e8204f780da1c7a654dfc7fccbce61829482",
+				OffchainPublicKey: "ocr2off_evm_1b2f956664ec31c6aed074b2dbd57bb8da8a27f574ca0b1ace16fe6d1b5fb066",
+				PeerID:            "12D3KooWC5Bi42rp3gH9p3DmDCk4HVgyA67BcXTDhWRtp8sdwWcz",
+				OffChainKeyId:     "f0023c78e719c26878f351ade1f8b80bf5ae403c953c49226155294c7305a7b7",
+				CSAPublicKey:      "8831a97b40f8a9ec8aecc4778fb5b0e80eac9f7657056bea34d2b30c14f29adb",
+			},
 		}
 		nodeConfigs[MercuryBtc] = nodeConfigsMercuryBtc
 	}
@@ -155,78 +159,96 @@ func GetNodeConfigs(target int) []NodeOCR2MercuryConfig {
 		nodeConfigsMercuryEth := []NodeOCR2MercuryConfig{
 			{
 				Id:                1,
-				ConfigPublicKey:   "ocr2cfg_evm_e9d1b5739d56f5db7a6df1ef6e98abc9d7e4eb7f83ee2896277433e7a095de68",
-				OnchainPublicKey:  "ocr2on_evm_455d111e29d14fdd6bafb406b7f6b4e9b8f8398b",
-				OffchainPublicKey: "ocr2off_evm_bc79751f3b8038d541a628ec55c4261f2b112ed164aa50fd3919bdd959937dd7",
-				PeerID:            "12D3KooWMM4ufpHRmAuXBhwWeY6V12UMKjonkg1YR82PPLYMsYKS",
-				OffChainKeyId:     "0e67918800cf03e82c6b64bc29501903479e08efe61efc70404de449242616da",
-				CSAPublicKey:      "47c7c72b247f52897d3eae93c451035e600dd2c5b51636929961d53a3feab825",
+				ConfigPublicKey:   "ocr2cfg_evm_0a0ad55b6513b8356a63572734966d5ac2292f94d0703081540a806065777a13",
+				OnchainPublicKey:  "ocr2on_evm_9b0215d21af8d04d13fe0c8e498d33ce52d853f7",
+				OffchainPublicKey: "ocr2off_evm_02640fef80e7a541e1e38d181c61c2908d96daaf9c99b28337ffe7bffdcf02ef",
+				PeerID:            "12D3KooWJCEsfgchffSMFo3WWpJaeVKpb1cx5iUhax7GPGXmvpto",
+				OffChainKeyId:     "ad99fe4d2e6be84b60a538b0f154b5b5674b967d3563e73270c13684db7a95da",
+				CSAPublicKey:      "78804c63374be97b450edbb37213c230a187fec0157177f5b7dce98038cab7c7",
 			}, {
 				Id:                2,
-				ConfigPublicKey:   "ocr2cfg_evm_5e44bae57b8c0ff9c70ae5d9cc78743728ddb3b8b85ca711472ca62d70890c6c",
-				OnchainPublicKey:  "ocr2on_evm_e4b28adb88623b55810ea8de38f165efdfddd075",
-				OffchainPublicKey: "ocr2off_evm_ae38f55d982dca6b31bc7ba063705dd036c4f105228319a718ff5479a737df7f",
-				PeerID:            "12D3KooWPjc5CeHTBc4LL9Z3ekyfEbVHhP85MqwffJfmfP68y3h7",
-				OffChainKeyId:     "3bfa46d0fb01ed08021933a801a363ffaf62e6552bc9a35312cec3689d56fd75",
-				CSAPublicKey:      "66ed61baa2c6e8ff8d6db48ba9d6cf7f2f212bf922dff57eda2a8558d65e69c0",
+				ConfigPublicKey:   "ocr2cfg_evm_986c9f09b1149d6730bf34533832fe5a5b9fb16251deaded011e53a1c16cbd76",
+				OnchainPublicKey:  "ocr2on_evm_4a16ac188a18ddb26760b669fd71c669b0084156",
+				OffchainPublicKey: "ocr2off_evm_b8f4ad50a4da040a5a6c06fcfd040ed78019810bf79ea9b6702d96c440c8607b",
+				PeerID:            "12D3KooWK2N5cverNrfdu7DswaNGFu4iCFG1dgwgotY7iVkQNE1F",
+				OffChainKeyId:     "7abfb994e8e8f378ba480a848fad6aff501cc72edb6c98078eaf825e23ce9fb5",
+				CSAPublicKey:      "7d1fb12ba8ea979489a6aa5a48198002ecd36035da18332acfa58c82491698c3",
 			}, {
 				Id:                3,
-				ConfigPublicKey:   "ocr2cfg_evm_e47129509a26a213d10385a127aeeed724ff0050f960a81b172c35d0e29ee662",
-				OnchainPublicKey:  "ocr2on_evm_1a8b51f99e67d1fa693593724222e4e445d64061",
-				OffchainPublicKey: "ocr2off_evm_19d5e4baf4e60594dbf4b12fb905489dfcb93536f9a4d34eda69516e5859a8d7",
-				PeerID:            "12D3KooWAp9d7Hn4uw4nEwpmvUVWCoRH3qbuLhgtayDLNm7FK1KH",
-				OffChainKeyId:     "1018fe47ca4a486febabfd5ed92c6d6beae2f88402b3feacdc524bfd3f6f824d",
-				CSAPublicKey:      "424661e19e2aef1cfe643202d54f0e298ec1315459bc8bf46f6b9177e4b0d223",
+				ConfigPublicKey:   "ocr2cfg_evm_159f8ba5a42ef80714672644815edac86ec4e31881754e211e8f5eda38d50930",
+				OnchainPublicKey:  "ocr2on_evm_6f6a00822333913bfc014093b8b060b1f2212e17",
+				OffchainPublicKey: "ocr2off_evm_917b2c33e698bafa885d104589dc8d93892c742d5df32126faeb797d8ef2bae5",
+				PeerID:            "12D3KooWDjoTCv3HBUfVGTBxo9z4zjsVYdDSPaUWZKZKFKKJ6akq",
+				OffChainKeyId:     "234881bd69588ae6b16dced968320b7984c0aae89c105e09b8459a7b919f3edb",
+				CSAPublicKey:      "699dd4f2b22fb5698e3327b5b6b4e46fe9d104b88f80b06f2ff259a5c5d821c2",
 			}, {
 				Id:                4,
-				ConfigPublicKey:   "ocr2cfg_evm_8ee1ca170a6c3768013ba5af9546daeef7b625b5ca88fa506fe3d60e908b1f7a",
-				OnchainPublicKey:  "ocr2on_evm_864f1e7a341599c769654c0d78b35f9990bf7dae",
-				OffchainPublicKey: "ocr2off_evm_1d53341aa1d719ddb94fd4da2567aff2705b076d236170b0147a0c543b8c263b",
-				PeerID:            "12D3KooWMDF2YxveKKa7rYN4fM7Uz46basme4fAHR28uwEoeKu45",
-				OffChainKeyId:     "474bc10800130147f52d5c9c6ae9468d7b8e463e3e6cbaf3439157c970acdf79",
-				CSAPublicKey:      "f73ad354bde5da64affdff723ff4f0ac3d9a1d667d39b2dac7f1c75fedeab0e5",
+				ConfigPublicKey:   "ocr2cfg_evm_7f194cad00f293d0adac3b2a03a66240b34ac71c5ca5be5ba0e8803a1b269c49",
+				OnchainPublicKey:  "ocr2on_evm_8e4e2093d5b629a0b884f567e6867c052a65205c",
+				OffchainPublicKey: "ocr2off_evm_b33cc33a7f942e52aaba9dbecbcb3ce579319cf8a05e88b6be2d70235a3c1da7",
+				PeerID:            "12D3KooWKaVh29LwUq9NfvRQw8nFuzUJrPfYzpzQFWPSCwnpkhij",
+				OffChainKeyId:     "5995a0826a84d115eb1e05978e0e55ef914e229ca83e672f367f9403ef5a6c30",
+				CSAPublicKey:      "0d52032dc5e6a9eee050386d3e7fd6c413a722a6490cb3fb01f17bc18b338117",
+			},
+			{
+				Id:                5,
+				ConfigPublicKey:   "ocr2cfg_evm_3696551c72cfa5150936f5bb9c462bb38e4c9f24518e36e2fd11a06756f0d206",
+				OnchainPublicKey:  "ocr2on_evm_5df501ad08f0fcaecb1e1cf5dfe96bdfd3bf736f",
+				OffchainPublicKey: "ocr2off_evm_4639efe838061ad3fd62ce005917ce0702d6dad7f1834a53736ad61911e3d8d6",
+				PeerID:            "12D3KooWC5Bi42rp3gH9p3DmDCk4HVgyA67BcXTDhWRtp8sdwWcz",
+				OffChainKeyId:     "133c76025ac88eba10367b8eb639e2bd07339e4e63b974946f3298962422f652",
+				CSAPublicKey:      "8831a97b40f8a9ec8aecc4778fb5b0e80eac9f7657056bea34d2b30c14f29adb",
 			},
 		}
 		nodeConfigs[MercuryEth] = nodeConfigsMercuryEth
 	}
 
 	{
-		nodeConfigsMercuryLink := []NodeOCR2MercuryConfig{
+		nodeConfigsMercuryValueless := []NodeOCR2MercuryConfig{
 			{
 				Id:                1,
-				ConfigPublicKey:   "ocr2cfg_evm_8d09c3d1eb07079cb4ead6bb9b66a89db292c4bbc77215c76fe0b42c0a1df375",
-				OnchainPublicKey:  "ocr2on_evm_43eae3e84ced52e3d51a57a69adb89ac3d5e4d47",
-				OffchainPublicKey: "ocr2off_evm_592bec4f1269f2810921343581c27e3641177753b3050ed23ac2b5c4c6f70b3d",
-				PeerID:            "12D3KooWMM4ufpHRmAuXBhwWeY6V12UMKjonkg1YR82PPLYMsYKS",
-				OffChainKeyId:     "c5f0ae2bd8422f7734cd1d507a45aa9ba18e7ba7f2e0bd2e40a5bc9fe9060b7d",
-				CSAPublicKey:      "47c7c72b247f52897d3eae93c451035e600dd2c5b51636929961d53a3feab825",
+				ConfigPublicKey:   "ocr2cfg_evm_cbc43f6e67d206a89ee97499f533dee52895fdcd7b53da942fe421248a893d23",
+				OnchainPublicKey:  "ocr2on_evm_e29fc54bc256762dfcb62318a279c379c96347f0",
+				OffchainPublicKey: "ocr2off_evm_326a134166ed00d53028aff6fd2b0431795a5634d6691c9bcd4305385e759202",
+				PeerID:            "12D3KooWJCEsfgchffSMFo3WWpJaeVKpb1cx5iUhax7GPGXmvpto",
+				OffChainKeyId:     "ffbd4c8ac28d23b6e3de2d7583aff0dcc2f199d2fd237bcc360b82cdcf9a7c4e",
+				CSAPublicKey:      "78804c63374be97b450edbb37213c230a187fec0157177f5b7dce98038cab7c7",
 			}, {
 				Id:                2,
-				ConfigPublicKey:   "ocr2cfg_evm_8aef7740beb691b5ad5c923f888899177c346adb10610159e1178e5db6e37174",
-				OnchainPublicKey:  "ocr2on_evm_8664c5b40fd6491c308833d4916c48531c437110",
-				OffchainPublicKey: "ocr2off_evm_246e6e252bfbf0ee58b2bf397da566a45a985feea4707f85e81e476cf7dca015",
-				PeerID:            "12D3KooWPjc5CeHTBc4LL9Z3ekyfEbVHhP85MqwffJfmfP68y3h7",
-				OffChainKeyId:     "07712426b38a57d77966aeef2885e9c0df18aab7ec466fbd477e586bd904fafa",
-				CSAPublicKey:      "66ed61baa2c6e8ff8d6db48ba9d6cf7f2f212bf922dff57eda2a8558d65e69c0",
+				ConfigPublicKey:   "ocr2cfg_evm_806a027619e18403f8dd440031ae3f99defaf2800d7a4456498c53d45f18791d",
+				OnchainPublicKey:  "ocr2on_evm_b279a37068c323a1bc5ee23ed0b2bbcd5df2e613",
+				OffchainPublicKey: "ocr2off_evm_43f442c5b58ef30f64938d43cb5d537e9eac02b74613fb73f46b7efa9d9df112",
+				PeerID:            "12D3KooWK2N5cverNrfdu7DswaNGFu4iCFG1dgwgotY7iVkQNE1F",
+				OffChainKeyId:     "e944dcce865bc5fc871fd3129809ab55a7dc14107a702e954241f6c283aa42a1",
+				CSAPublicKey:      "7d1fb12ba8ea979489a6aa5a48198002ecd36035da18332acfa58c82491698c3",
 			}, {
 				Id:                3,
-				ConfigPublicKey:   "ocr2cfg_evm_a8424bb03176b5973ea21651a44e8c95ddf7819a3a354b873d9baf4fd5456d15",
-				OnchainPublicKey:  "ocr2on_evm_0060c22f693a7023f4ab0f484b234a55b1fd0feb",
-				OffchainPublicKey: "ocr2off_evm_b0d3c6ebe0ff2d55269149426ab0a670eadd1da41caa8a994434d2a020927681",
-				PeerID:            "12D3KooWAp9d7Hn4uw4nEwpmvUVWCoRH3qbuLhgtayDLNm7FK1KH",
-				OffChainKeyId:     "1d30e5c93ba705721c884165edac901fceae3f5825a52b368a65da093dc9049a",
-				CSAPublicKey:      "424661e19e2aef1cfe643202d54f0e298ec1315459bc8bf46f6b9177e4b0d223",
+				ConfigPublicKey:   "ocr2cfg_evm_f3c7c0523033e2bcb9188c20dd6beb14cff8fecd70de98fe1f0f7cee9f193821",
+				OnchainPublicKey:  "ocr2on_evm_3509dcd08d1abbc592bb32206dade74bbeab90e3",
+				OffchainPublicKey: "ocr2off_evm_9e8766aff62ef581f1890059db71f5e17ee23da4fc13ec078ffa4dbb4762b9e2",
+				PeerID:            "12D3KooWDjoTCv3HBUfVGTBxo9z4zjsVYdDSPaUWZKZKFKKJ6akq",
+				OffChainKeyId:     "3a59b9dc7d8d62e534a1d78fbf90af6abf9b24c66c47a474d827c938eda981a5",
+				CSAPublicKey:      "699dd4f2b22fb5698e3327b5b6b4e46fe9d104b88f80b06f2ff259a5c5d821c2",
 			}, {
 				Id:                4,
-				ConfigPublicKey:   "ocr2cfg_evm_93436f43f26a3d775e9304f7c7d2294bc7d125d32f2f930e8a56347b3e85f779",
-				OnchainPublicKey:  "ocr2on_evm_2a2edd443183162a9b001695acf6f48b7161c947",
-				OffchainPublicKey: "ocr2off_evm_0f3ca5c5c1cd7baf1694320b6042ea8212b9c70b335bdf921b55add05460d552",
-				PeerID:            "12D3KooWMDF2YxveKKa7rYN4fM7Uz46basme4fAHR28uwEoeKu45",
-				OffChainKeyId:     "47534d0735e7f155bd7893b1e383cb0187ec2e87bd48bf98a58902306688afac",
-				CSAPublicKey:      "f73ad354bde5da64affdff723ff4f0ac3d9a1d667d39b2dac7f1c75fedeab0e5",
+				ConfigPublicKey:   "ocr2cfg_evm_839a5bfed37a71fdd79a8f9657ceb70671eb6b16ad155ce76aaca03c9b65c43d",
+				OnchainPublicKey:  "ocr2on_evm_8b2a235cac379fe9a6e8eaba26356c142232ab72",
+				OffchainPublicKey: "ocr2off_evm_9e8a51e99182c980e623a280ef93199ae515d879eff64f9644ecfaf7052b7d09",
+				PeerID:            "12D3KooWKaVh29LwUq9NfvRQw8nFuzUJrPfYzpzQFWPSCwnpkhij",
+				OffChainKeyId:     "21977705b40ffa4b2aa02501d19f05d0e1856d10a2105259050cae6dc7fd423c",
+				CSAPublicKey:      "0d52032dc5e6a9eee050386d3e7fd6c413a722a6490cb3fb01f17bc18b338117",
+			},
+			{
+				Id:                5,
+				ConfigPublicKey:   "ocr2cfg_evm_e05de136cff63ec27c97cdc9446657f9ce39b5b13fc6cea1b208e685cf06b303",
+				OnchainPublicKey:  "ocr2on_evm_9d354edf39d6d4b69679218b4c4616ffb0366e5f",
+				OffchainPublicKey: "ocr2off_evm_85908c87a3a4d2f1bb2869baac645eb518c226ac7696899949db755ee2e684f6",
+				PeerID:            "12D3KooWC5Bi42rp3gH9p3DmDCk4HVgyA67BcXTDhWRtp8sdwWcz",
+				OffChainKeyId:     "9bc62bf48e181cad07619e75b126293f65cc920e0564f5820e92d95b1f274349",
+				CSAPublicKey:      "8831a97b40f8a9ec8aecc4778fb5b0e80eac9f7657056bea34d2b30c14f29adb",
 			},
 		}
-		nodeConfigs[MercuryLink] = nodeConfigsMercuryLink
+		nodeConfigs[MercuryValueless] = nodeConfigsMercuryValueless
 	}
 
 	return nodeConfigs[target]
@@ -257,11 +279,12 @@ func TestEncodeOCR2MercuryV3Config(t *testing.T) {
 		configPkBytesFixed := [curve25519.PointSize]byte{}
 		copy(configPkBytesFixed[:], configPkBytes)
 
+		csaPublicKey := strings.TrimPrefix(nodeConfig.CSAPublicKey, "csa_")
 		oracleIdentity := confighelper.OracleIdentity{
 			OffchainPublicKey: offchainPkBytesFixed,
 			OnchainPublicKey:  onchainPublicKey,
 			PeerID:            nodeConfig.PeerID,
-			TransmitAccount:   types.Account(nodeConfig.CSAPublicKey),
+			TransmitAccount:   types.Account(csaPublicKey),
 		}
 		oracleIdentityExtra := confighelper.OracleIdentityExtra{
 			OracleIdentity:            oracleIdentity,
@@ -363,9 +386,30 @@ func NewHash() common.Hash {
 	return common.BytesToHash(b)
 }
 
+func TestFeedIds(t *testing.T) {
+	symbols := []string{
+		"BTC/USD",
+		"ETH/USD",
+		"Valueless/USD",
+	}
+
+	for _, symbol := range symbols {
+		symbolByte := []byte(symbol)
+		feedId := sha3.NewLegacyKeccak256()
+		feedId.Write(symbolByte)
+		fmt.Printf("\nsymbol: %v, feedId: 0x0003%v", symbol, strings.TrimPrefix(hexutil.Encode(feedId.Sum(nil)), "0x")[4:])
+	}
+	fmt.Printf("\n\n")
+}
+
 func TestFeedId(t *testing.T) {
-	feedId := NewHash().Bytes()
-	fmt.Printf("\nfeedId: 0x0003%v\n", strings.TrimPrefix(hexutil.Encode(feedId), "0x")[4:])
+	symbol := "BTC/USD"
+	symbolByte := []byte(symbol)
+
+	feedId := sha3.NewLegacyKeccak256()
+	feedId.Write(symbolByte)
+
+	fmt.Printf("\nfeedId: 0x0003%v\n", strings.TrimPrefix(hexutil.Encode(feedId.Sum(nil)), "0x")[4:])
 }
 
 func PrintList(content []common.Address) string {
