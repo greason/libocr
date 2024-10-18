@@ -109,6 +109,11 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 2% / 14400s
 		AlphaPPB = uint64(20000000)
 		DeltaC = time.Hour * 4
+
+	case BSC_FDUSD:
+		// 0.1%/86400s
+		AlphaPPB = uint64(1000000)
+		DeltaC = time.Hour * 24
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -147,6 +152,8 @@ const (
 	BSC_nodeMonkey_btc
 	BSC_ordinalsMaxiBiz_btc
 	BSC_quantumCats_btc
+
+	BSC_FDUSD
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -682,12 +689,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_sats_usd.json"
+		publicKeyFileName := "publicKeys_fdusd_usd.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/bscMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(BSC_sats, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(BSC_FDUSD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
