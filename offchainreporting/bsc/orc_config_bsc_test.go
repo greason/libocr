@@ -696,7 +696,7 @@ func TestEncodeOCRConfig(t *testing.T) {
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
 		publicKeyFileName := "publicKeys_lista_usd.json"
-		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/bscMain/publicKeys/",
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/bscMain/publicKeys/",
 			publicKeyFileName)
 	}
 

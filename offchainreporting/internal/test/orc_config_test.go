@@ -109,6 +109,11 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) OffChainAggregato
 		AlphaPPB = uint64(50000000)
 		DeltaC = time.Hour * 8
 		break
+	case CoreCLNDUSD:
+		// 0.5%/3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+		break
 	}
 	// merlin test
 	return OffChainAggregatorConfig{
@@ -177,6 +182,7 @@ const (
 	CoreTestBtc
 	CoreTestUsdt
 	CoreTestCore
+	CoreCLNDUSD
 
 	BSCTest_bitcoin_puppets_btc
 	BSCTest_nodeMonkey_btc
@@ -1554,12 +1560,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_core_usd.json"
-		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_bitlayer/chainlink/apro.configs/coreTest/publicKeys/",
+		publicKeyFileName := "publicKeys_clnd_usd.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/coreTest/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(CoreTestCore, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(CoreCLNDUSD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
