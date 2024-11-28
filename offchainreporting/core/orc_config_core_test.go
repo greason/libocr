@@ -41,12 +41,14 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 	switch target {
 	case CoreCore:
 		// 1% / 3600s
-		AlphaPPB = uint64(10000000)
-		DeltaC = time.Hour * 1
+		// 0.5%/1800s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Minute * 30
 	case CoreBtc:
 		// 0.5% / 3600s
+		// 0.5%/1800s
 		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+		DeltaC = time.Minute * 30
 	case CoreUsdt:
 		// 0.1% / 86400s
 		AlphaPPB = uint64(1000000)
@@ -83,8 +85,9 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		DeltaC = time.Hour * 1
 	case CoreSolvBtcbUSd:
 		// 0.5%/3600s
+		// 0.5%/1800s
 		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+		DeltaC = time.Minute * 30
 	case CoreSolvBtcmUSd:
 		// 0.5%/3600s
 		AlphaPPB = uint64(5000000)
@@ -99,9 +102,9 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		AlphaPPB = uint64(10000000)
 		DeltaC = time.Hour * 1
 	case CoreCLNDUSD:
-		// 0.5%/3600s
+		// 0.5%/1800s
 		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+		DeltaC = time.Minute * 30
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -675,12 +678,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_clnd_usd.json"
+		publicKeyFileName := "publicKeys_solvbtc.b_usd_coremarket.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/coreMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(CoreCLNDUSD, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(CoreSolvBtcbUSd, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,

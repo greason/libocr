@@ -59,6 +59,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
+	case IOTEX_ioUSD_USD:
+		// 0.1% / 86400s
+		AlphaPPB = uint64(1000000)
+		DeltaC = time.Hour * 24
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -83,6 +87,7 @@ const (
 	IOTEX_USDT_USD
 	IOTEX_USDC_USD
 	IOTEX_ETH_USD
+	IOTEX_ioUSD_USD
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -142,12 +147,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_eth_usd.json"
+		publicKeyFileName := "publicKeys_iousd_usd.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/ioTexMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(IOTEX_ETH_USD, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(IOTEX_ioUSD_USD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,

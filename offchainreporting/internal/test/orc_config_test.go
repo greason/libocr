@@ -110,9 +110,9 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) OffChainAggregato
 		DeltaC = time.Hour * 8
 		break
 	case CoreCLNDUSD:
-		// 0.5%/3600s
+		// 0.5%/1800s
 		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
+		DeltaC = time.Minute * 30
 		break
 	}
 	// merlin test
