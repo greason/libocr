@@ -59,6 +59,26 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
+	case TAIKO_SolvBTC_USD:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case TAIKO_SolvBTCbbn_USD:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case TAIKO_MBTC_USD:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case TAIKO_uniBTC_USD:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
+	case TAIKO_stBTC_USD:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -83,6 +103,12 @@ const (
 	TAIKO_USDT_USD
 	TAIKO_USDC_USD
 	TAIKO_TAIKO_USD
+
+	TAIKO_SolvBTC_USD
+	TAIKO_SolvBTCbbn_USD
+	TAIKO_MBTC_USD
+	TAIKO_uniBTC_USD
+	TAIKO_stBTC_USD
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -142,12 +168,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_taiko_usd.json"
+		publicKeyFileName := "publicKeys_solvbtc.bbn_usd.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/taikoMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(TAIKO_TAIKO_USD, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(TAIKO_SolvBTCbbn_USD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
