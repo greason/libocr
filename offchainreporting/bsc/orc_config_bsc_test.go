@@ -118,6 +118,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.5%/3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
+	case BSC_FB_USD:
+		// 0.5%/3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -160,6 +164,7 @@ const (
 	BSC_FDUSD
 
 	BSC_LISTA_USD
+	BSC_FB_USD
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -695,12 +700,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_lista_usd.json"
+		publicKeyFileName := "publicKeys_fb_usd.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/bscMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(BSC_LISTA_USD, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(BSC_FB_USD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
