@@ -54,9 +54,9 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 	case ModeWeEth:
 		// 0.5% / 3600s
 
-		// 1000%/1000天
-		AlphaPPB = uint64(10000000000)
-		DeltaC = time.Hour * 24 * 1000
+		// 10%/10d
+		AlphaPPB = uint64(100000000)
+		DeltaC = time.Hour * 24 * 10
 	case ModeUsdt:
 		// 0.1% / 86400s
 		AlphaPPB = uint64(1000000)
@@ -882,7 +882,7 @@ func GetOffChainAggregatorConfig(target int, publicKeyPath string) test.OffChain
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	readPublicKeyFromFIle := true
+	readPublicKeyFromFIle := false
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
 		publicKeyFileName := "publicKeys_abtc_usd.json"
@@ -890,7 +890,7 @@ func TestEncodeOCRConfig(t *testing.T) {
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(ModeaBtcUSD, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(ModeWeEth, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,

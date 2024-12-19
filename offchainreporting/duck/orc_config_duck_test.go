@@ -39,59 +39,35 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 	var DeltaRound = time.Second * 30
 
 	switch target {
-	case TAIKO_BTC_USD:
+	case DUCK_BTC_USD:
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
-	case TAIKO_ETH_USD:
+	case DUCK_ETH_USD:
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
-	case TAIKO_USDT_USD:
+	case DUCK_USDT_USD:
 		// 0.1% / 86400s
 		AlphaPPB = uint64(1000000)
 		DeltaC = time.Hour * 24
-	case TAIKO_USDC_USD:
+	case DUCK_USDC_USD:
 		// 0.1% / 86400s
 		AlphaPPB = uint64(1000000)
 		DeltaC = time.Hour * 24
-	case TAIKO_TAIKO_USD:
+	case DUCK_TON_USD:
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
-	case TAIKO_SolvBTC_USD:
+	case DUCK_pumpBTC_BTC:
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
-	case TAIKO_SolvBTCbbn_USD:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
-	case TAIKO_MBTC_USD:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
-	case TAIKO_uniBTC_USD:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
-	case TAIKO_stBTC_USD:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
-	case TAIKO_MBTC_BTC:
+	case DUCK_MBTC_BTC:
 		// 0.5%/10d
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 24 * 10
-	case TAIKO_stBTC_BTC:
-		// 0.5%/10d
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 24 * 10
-	case TAIKO_uniBTC_BTC:
-		// 0.5%/10d
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 24 * 10
-	case TAIKO_enzoBTC_BTC:
+	case DUCK_uniBTC_BTC:
 		// 0.5%/10d
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 24 * 10
@@ -114,22 +90,15 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 }
 
 const (
-	TAIKO_BTC_USD = iota
-	TAIKO_ETH_USD
-	TAIKO_USDT_USD
-	TAIKO_USDC_USD
-	TAIKO_TAIKO_USD
+	DUCK_BTC_USD = iota
+	DUCK_ETH_USD
+	DUCK_USDT_USD
+	DUCK_USDC_USD
+	DUCK_TON_USD
 
-	TAIKO_SolvBTC_USD
-	TAIKO_SolvBTCbbn_USD
-	TAIKO_MBTC_USD
-	TAIKO_uniBTC_USD
-	TAIKO_stBTC_USD
-
-	TAIKO_MBTC_BTC
-	TAIKO_stBTC_BTC
-	TAIKO_uniBTC_BTC
-	TAIKO_enzoBTC_BTC
+	DUCK_MBTC_BTC
+	DUCK_uniBTC_BTC
+	DUCK_pumpBTC_BTC
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -189,12 +158,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_enzobtc_btc.json"
-		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/taikoMain/publicKeys/",
+		publicKeyFileName := "publicKeys_btc_usd.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/duckMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(TAIKO_enzoBTC_BTC, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(DUCK_BTC_USD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
