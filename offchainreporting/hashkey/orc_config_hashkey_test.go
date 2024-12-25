@@ -39,38 +39,22 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 	var DeltaRound = time.Second * 30
 
 	switch target {
-	case DUCK_BTC_USD:
+	case HASHKEY_BTC_USD:
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
-	case DUCK_ETH_USD:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
-	case DUCK_USDT_USD:
+	case HASHKEY_USDT_USD:
 		// 0.1% / 86400s
 		AlphaPPB = uint64(1000000)
 		DeltaC = time.Hour * 24
-	case DUCK_USDC_USD:
+	case HASHKEY_USDC_USD:
 		// 0.1% / 86400s
 		AlphaPPB = uint64(1000000)
 		DeltaC = time.Hour * 24
-	case DUCK_TON_USD:
+	case HASHKEY_HSK_USD:
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
-	case DUCK_pumpBTC_BTC:
-		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 1
-	case DUCK_MBTC_BTC:
-		// 0.5%/10d
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 24 * 10
-	case DUCK_uniBTC_BTC:
-		// 0.5%/10d
-		AlphaPPB = uint64(5000000)
-		DeltaC = time.Hour * 24 * 10
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -90,15 +74,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 }
 
 const (
-	DUCK_BTC_USD = iota
-	DUCK_ETH_USD
-	DUCK_USDT_USD
-	DUCK_USDC_USD
-	DUCK_TON_USD
-
-	DUCK_MBTC_BTC
-	DUCK_uniBTC_BTC
-	DUCK_pumpBTC_BTC
+	HASHKEY_BTC_USD = iota
+	HASHKEY_USDT_USD
+	HASHKEY_USDC_USD
+	HASHKEY_HSK_USD
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -158,12 +137,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_unibtc_btc.json"
-		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/duckMain/publicKeys/",
+		publicKeyFileName := "publicKeys_usdt_usd.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/hashkey/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(DUCK_uniBTC_BTC, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(HASHKEY_USDT_USD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
