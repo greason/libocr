@@ -55,6 +55,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.5% / 3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
+	case GOAT_ETH_USD:
+		// 0.5% / 3600s
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 1
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -78,6 +82,7 @@ const (
 	GOAT_USDT_USD
 	GOAT_USDC_USD
 	GOAT_DOGE_USD
+	GOAT_ETH_USD
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -137,12 +142,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_doge_usd.json"
+		publicKeyFileName := "publicKeys_eth_usd.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/goatMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(GOAT_DOGE_USD, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(GOAT_ETH_USD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,

@@ -2,12 +2,15 @@ package bsquare
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ocrConfigHelper "github.com/smartcontractkit/libocr/offchainreporting/confighelper"
 	"github.com/smartcontractkit/libocr/offchainreporting/internal/test"
 	ocrTypes "github.com/smartcontractkit/libocr/offchainreporting/types"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -89,6 +92,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.2%/10天
 		AlphaPPB = uint64(2000000)
 		DeltaC = time.Hour * 240
+	case BsquareuniBtcBtcER:
+		// 0.5%/10天
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 240
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -124,6 +131,7 @@ const (
 	BsquareMBtcBtcER
 	BsquareSolvBtcMBtcER
 	BsquareuBtcBtcER
+	BsquareuniBtcBtcER
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -1160,8 +1168,20 @@ func GetNodeConfigs(target int) []test.NodeOCRConfig {
 	return nodeConfigs[target]
 }
 
-func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
+func GetOffChainAggregatorConfig(target int, publicKeyPath string) test.OffChainAggregatorConfig {
 	nodeConfigs := GetNodeConfigs(target)
+
+	if len(publicKeyPath) > 0 {
+		content, _ := os.ReadFile(publicKeyPath)
+		var ocrConfigs []test.NodeOCRConfig
+		err := json.Unmarshal(content, &ocrConfigs)
+		if err != nil {
+			return test.OffChainAggregatorConfig{}
+		}
+		ocrConfigs = ocrConfigs[2:]
+		nodeConfigs = ocrConfigs
+		fmt.Printf("nodeConfigs: %v", nodeConfigs)
+	}
 	ocrConfig := AproOffChainAggregatorConfig(len(nodeConfigs), target)
 	for _, nodeConfig := range nodeConfigs {
 		// Need to convert the key representations
@@ -1197,7 +1217,15 @@ func GetOffChainAggregatorConfig(target int) test.OffChainAggregatorConfig {
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	ocrConfig := GetOffChainAggregatorConfig(BsquareuBtcBtcER)
+	readPublicKeyFromFIle := true
+	publicKeyPath := ""
+	if readPublicKeyFromFIle {
+		publicKeyFileName := "publicKeys_unibtc_btc.json"
+		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/bsquareMain/publicKeys/",
+			publicKeyFileName)
+	}
+
+	ocrConfig := GetOffChainAggregatorConfig(BsquareuniBtcBtcER, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,

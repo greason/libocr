@@ -83,6 +83,10 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 		// 0.5%/3600s
 		AlphaPPB = uint64(5000000)
 		DeltaC = time.Hour * 1
+	case ModeoBtcBtc:
+		// 0.5%/10天
+		AlphaPPB = uint64(5000000)
+		DeltaC = time.Hour * 240
 	}
 
 	return test.OffChainAggregatorConfig{
@@ -113,6 +117,7 @@ const (
 	ModeBBUSD
 
 	ModeaBtcUSD
+	ModeoBtcBtc
 )
 
 func GetNodeConfigs(target int) []test.NodeOCRConfig {
@@ -882,15 +887,15 @@ func GetOffChainAggregatorConfig(target int, publicKeyPath string) test.OffChain
 }
 
 func TestEncodeOCRConfig(t *testing.T) {
-	readPublicKeyFromFIle := false
+	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_abtc_usd.json"
+		publicKeyFileName := "publicKeys_obtc_btc.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/modeMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(ModeWeEth, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(ModeoBtcBtc, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,
