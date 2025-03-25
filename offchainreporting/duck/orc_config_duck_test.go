@@ -41,11 +41,13 @@ func AproOffChainAggregatorConfig(numberNodes int, target int) test.OffChainAggr
 	switch target {
 	case DUCK_BTC_USD:
 		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
+		// 0.1% / 3600s
+		AlphaPPB = uint64(1000000)
 		DeltaC = time.Hour * 1
 	case DUCK_ETH_USD:
 		// 0.5% / 3600s
-		AlphaPPB = uint64(5000000)
+		// 0.1% / 3600s
+		AlphaPPB = uint64(1000000)
 		DeltaC = time.Hour * 1
 	case DUCK_USDT_USD:
 		// 0.1% / 86400s
@@ -158,12 +160,12 @@ func TestEncodeOCRConfig(t *testing.T) {
 	readPublicKeyFromFIle := true
 	publicKeyPath := ""
 	if readPublicKeyFromFIle {
-		publicKeyFileName := "publicKeys_unibtc_btc.json"
+		publicKeyFileName := "publicKeys_eth_usd.json"
 		publicKeyPath = filepath.Join("/Users/greason/Documents/workspace_apro/aproOracle/apro.configs/duckMain/publicKeys/",
 			publicKeyFileName)
 	}
 
-	ocrConfig := GetOffChainAggregatorConfig(DUCK_uniBTC_BTC, publicKeyPath)
+	ocrConfig := GetOffChainAggregatorConfig(DUCK_ETH_USD, publicKeyPath)
 	signers, transmitters, threshold, encodedConfigVersion, encodedConfig, err := ocrConfigHelper.ContractSetConfigArgs(
 		ocrConfig.DeltaProgress,
 		ocrConfig.DeltaResend,

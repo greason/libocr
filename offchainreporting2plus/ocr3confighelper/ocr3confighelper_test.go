@@ -262,7 +262,7 @@ func GetAproOCR2MercuryConfig(target int) PublicConfig {
 }
 
 func TestEncodeOCR2MercuryV3Config(t *testing.T) {
-	const target = MercuryBtc
+	const target = MercuryValueless
 	publicConfig := GetAproOCR2MercuryConfig(target)
 	nodeConfigs := GetNodeConfigs(target)
 
